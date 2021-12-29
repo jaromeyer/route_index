@@ -91,12 +91,19 @@ class _EditRouteScreenState extends State<EditRouteScreen> {
                 });
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: grades
-                  .map((grade) =>
-                      Expanded(child: Text(grade, textAlign: TextAlign.center)))
-                  .toList(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: grades
+                    .map((grade) => SizedBox(
+                        width: 30,
+                        child: Text(
+                          grade,
+                          textAlign: TextAlign.center,
+                        )))
+                    .toList(),
+              ),
             ),
             ElevatedButton(
               child: const Text("Speichern"),

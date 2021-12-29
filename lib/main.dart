@@ -11,23 +11,6 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(RouteModelAdapter());
   await Hive.openBox('routes');
-  // add random routes for testing
-  await Hive.box('routes').add(RouteModel());
-  await Hive.box('routes').add(RouteModel()
-    ..name = "Seegurke"
-    ..grade = 8
-    ..sector = "Grotte"
-    ..setter = "Blub");
-  await Hive.box('routes').add(RouteModel()
-    ..name = "Essiggurke"
-    ..grade = 2
-    ..sector = "Garage"
-    ..setter = "Quarkus");
-  await Hive.box('routes').add(RouteModel()
-    ..name = "Wieso bisch so schlecht?"
-    ..grade = 3
-    ..sector = "Flachland"
-    ..setter = "Ferdinand");
   runApp(const MyApp());
 }
 

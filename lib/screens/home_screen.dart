@@ -90,9 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             onPressed: () {
               if (_godMode) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Adminmodus deaktiviert')),
+                );
                 setState(() => _godMode = false);
               } else {
-                // open passcode dialog
                 _showPasscodeLock();
               }
             },
@@ -135,11 +137,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding:
+                      const EdgeInsets.only(bottom: 12, left: 10, right: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: grades
-                        .map((grade) => Expanded(
+                        .map((grade) => SizedBox(
+                            width: 30,
                             child: Text(grade, textAlign: TextAlign.center)))
                         .toList(),
                   ),

@@ -118,19 +118,21 @@ class _RouteScreenState extends State<RouteScreen> {
                     }
                   },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: grades
-                      .map(
-                        (grade) => Expanded(
-                          child: Text(
-                            grade,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      )
-                      .toList(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: grades
+                        .map((grade) => SizedBox(
+                              width: 30,
+                              child: Text(
+                                grade,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ))
+                        .toList(),
+                  ),
                 ),
                 Container(
                   alignment: Alignment.center,
