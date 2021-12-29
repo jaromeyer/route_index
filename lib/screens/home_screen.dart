@@ -78,9 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _godMode
               ? IconButton(
                   onPressed: () {
-                    // add new route and open edit screen
                     final RouteModel route = RouteModel();
-                    Hive.box('routes').add(route);
                     Navigator.pushNamed(context, '/edit', arguments: route)
                         .then((_) => setState(() {}));
                   },

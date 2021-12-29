@@ -7,7 +7,7 @@ part 'route_model.g.dart';
 @HiveType(typeId: 0)
 class RouteModel extends HiveObject {
   @HiveField(0)
-  String name = "Neue Route";
+  String name = "";
 
   @HiveField(1)
   int grade = 0;
@@ -16,7 +16,7 @@ class RouteModel extends HiveObject {
   String sector = "Flachland";
 
   @HiveField(3)
-  String setter = "Markus der Gurkenkönig";
+  String setter = "";
 
   @HiveField(4)
   DateTime date = DateTime.now();

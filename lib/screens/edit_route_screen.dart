@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../models/route_model.dart';
 import '../values.dart';
@@ -50,19 +51,31 @@ class _EditRouteScreenState extends State<EditRouteScreen> {
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
-            TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
+            TextField(
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(),
                 labelText: 'Name',
+                suffixIcon: IconButton(
+                  onPressed: _nameController.clear,
+                  icon: const Icon(Icons.clear),
+                ),
               ),
               controller: _nameController,
+              textInputAction: TextInputAction.next,
+              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
+            TextField(
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(),
                 labelText: 'Schrauber',
+                suffixIcon: IconButton(
+                  onPressed: _setterController.clear,
+                  icon: const Icon(Icons.clear),
+                ),
               ),
               controller: _setterController,
+              textInputAction: TextInputAction.next,
+              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
             ),
             DropdownButtonFormField(
               decoration: const InputDecoration(
@@ -112,7 +125,11 @@ class _EditRouteScreenState extends State<EditRouteScreen> {
                 widget.route.setter = _setterController.text;
                 widget.route.sector = _sector;
                 widget.route.grade = _currentSliderValue.round();
-                widget.route.save();
+                try {
+                  widget.route.save();
+                } catch (err) {
+                  Hive.box('routes').add(widget.route);
+                }
                 Navigator.pop(context);
               },
             ),
