@@ -15,6 +15,7 @@ class RouteScreen extends StatefulWidget {
 
 class _RouteScreenState extends State<RouteScreen> {
   late double _currentSliderValue = widget.route.grade.toDouble();
+  final TextEditingController _commentController = TextEditingController();
   bool _savedRating = false;
 
   Expanded _buildStatCard(String title, String count, Color color) {
@@ -75,11 +76,9 @@ class _RouteScreenState extends State<RouteScreen> {
             child: Row(
               children: <Widget>[
                 _buildStatCard(
-                    'Schwierigkeit', grades[route.grade], Colors.green),
+                    'Schwierigkeitsgrad', grades[route.grade], Colors.green),
                 _buildStatCard(
-                    'Bewertung',
-                    '${route.getUserGrade()} (${route.userGrades.length})',
-                    Colors.lightBlue),
+                    'Bewertung', route.getUserGradeString(), Colors.lightBlue),
                 _buildStatCard('Schraubdatum',
                     DateFormat("d.M.y").format(route.date), Colors.purple),
               ],
@@ -148,6 +147,11 @@ class _RouteScreenState extends State<RouteScreen> {
                             style: TextStyle(color: Colors.indigo),
                           ),
                           onPressed: () {
+                            setState(() {
+                              _savedRating = true;
+                              route.userGrades.add(_currentSliderValue.round());
+                            });
+                            route.save();
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: const Text('Bewertung gespeichert'),
@@ -163,15 +167,41 @@ class _RouteScreenState extends State<RouteScreen> {
                                 ),
                               ),
                             );
-                            setState(() {
-                              _savedRating = true;
-                              route.userGrades.add(_currentSliderValue.round());
-                            });
-                            route.save();
                           },
                         ),
                 ),
               ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Kommentar hinzufügen...',
+              ),
+              //maxLines: 2,
+              //keyboardType: TextInputType.text,
+              controller: _commentController,
+              onSubmitted: (value) {
+                setState(() {
+                  _commentController.clear();
+                  widget.route.comments.add(value);
+                });
+                widget.route.save();
+              },
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: route.comments.length,
+              itemBuilder: (BuildContext context, int index) {
+                final String comment =
+                    route.comments[route.comments.length - index - 1];
+                return ListTile(
+                  title: Text(comment),
+                );
+              },
             ),
           ),
         ],

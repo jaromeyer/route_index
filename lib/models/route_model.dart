@@ -10,7 +10,7 @@ class RouteModel extends HiveObject {
   String name = "";
 
   @HiveField(1)
-  int grade = 0;
+  int grade = 5;
 
   @HiveField(2)
   String sector = "Flachland";
@@ -24,13 +24,19 @@ class RouteModel extends HiveObject {
   @HiveField(5)
   List<int> userGrades = [];
 
-  String getUserGrade() {
+  @HiveField(6)
+  List<String> comments = [];
+
+  int getUserGrade() {
+    return (userGrades.reduce((value, element) => value + element) /
+            userGrades.length)
+        .round();
+  }
+
+  String getUserGradeString() {
     if (userGrades.isEmpty) {
       return "-";
     }
-    int avgGrade = (userGrades.reduce((value, element) => value + element) /
-            userGrades.length)
-        .round();
-    return grades[avgGrade];
+    return "${grades[getUserGrade()]} (${userGrades.length})";
   }
 }
