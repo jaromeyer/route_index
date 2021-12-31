@@ -29,6 +29,34 @@ class _EditRouteScreenState extends State<EditRouteScreen> {
     super.dispose();
   }
 
+  _showConfirmDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Route löschen"),
+          content: Text("Route ${widget.route.name} wirklich löschen?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Abbrechen"),
+            ),
+            TextButton(
+              onPressed: () {
+                widget.route.delete().then((_) =>
+                    Navigator.popUntil(context, ModalRoute.withName('/')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Route gelöscht'),
+                ));
+              },
+              child: const Text("Löschen"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +65,7 @@ class _EditRouteScreenState extends State<EditRouteScreen> {
         title: const Text("Route bearbeiten"),
         actions: [
           IconButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Route gelöscht')),
-              );
-              widget.route.delete().then((value) => Navigator.pop(context));
-            },
+            onPressed: _showConfirmDeleteDialog,
             icon: const Icon(Icons.delete),
           ),
         ],
@@ -74,8 +97,6 @@ class _EditRouteScreenState extends State<EditRouteScreen> {
                 ),
               ),
               controller: _setterController,
-              textInputAction: TextInputAction.next,
-              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
             ),
             DropdownButtonFormField(
               decoration: const InputDecoration(
@@ -105,7 +126,7 @@ class _EditRouteScreenState extends State<EditRouteScreen> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.only(bottom: 12, left: 10, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: grades
@@ -118,20 +139,45 @@ class _EditRouteScreenState extends State<EditRouteScreen> {
                     .toList(),
               ),
             ),
-            ElevatedButton(
-              child: const Text("Speichern"),
-              onPressed: () {
-                widget.route.name = _nameController.text;
-                widget.route.setter = _setterController.text;
-                widget.route.sector = _sector;
-                widget.route.grade = _currentSliderValue.round();
-                try {
-                  widget.route.save();
-                } catch (err) {
-                  Hive.box('routes').add(widget.route);
-                }
-                Navigator.pop(context);
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  child: const Text("Bewertungen löschen"),
+                  onPressed: () {
+                    widget.route.userGrades = [];
+                    widget.route.save();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Bewertungen gelöscht')),
+                    );
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text("Speichern"),
+                  onPressed: () {
+                    widget.route.name = _nameController.text;
+                    widget.route.setter = _setterController.text;
+                    widget.route.sector = _sector;
+                    widget.route.grade = _currentSliderValue.round();
+                    try {
+                      widget.route.save();
+                    } catch (err) {
+                      Hive.box('routes').add(widget.route);
+                    }
+                    Navigator.pop(context);
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text("Kommentare löschen"),
+                  onPressed: () {
+                    widget.route.comments = [];
+                    widget.route.save();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Kommentare gelöscht')),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),
