@@ -156,17 +156,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Divider(height: 1),
               itemBuilder: (BuildContext context, int index) {
                 final RouteModel route = routes[routes.length - index - 1];
-                bool isNew = route.date.difference(DateTime.now()) <=
-                    const Duration(days: 7);
+                //bool isNew = route.date.difference(DateTime.now()) <= const Duration(days: 7);
                 return ListTile(
                   title: Text(route.name),
-                  subtitle: Text(
-                    route.setter + " " + DateFormat("d.M.y").format(route.date),
+                  subtitle: Text(route.sector),
+                  leading: Container(
+                    width: 48,
+                    height: 48,
+                    //padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    alignment: Alignment.center,
+                    child: Text(
+                      grades[route.grade],
+                      style:
+                          TextStyle(color: getColor(route.grade), fontSize: 24),
+                    ),
                   ),
                   trailing: Text(
-                    grades[route.grade],
-                    style:
-                        TextStyle(color: getColor(route.grade), fontSize: 24),
+                    route.setter +
+                        "\n" +
+                        DateFormat("d.M.y").format(route.date),
+                    textAlign: TextAlign.right,
                   ),
                   onTap: () => Navigator.pushNamed(
                           context, _godMode ? '/edit' : '/info',
