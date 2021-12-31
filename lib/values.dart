@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 List<String> grades = [
-  "B1",
   "B2",
-  "B3",
+  "B2+",
+  "B3-",
+  "B3", //+1 ab da inklusiv
   "B3+",
   "B4-",
   "B4",
@@ -15,30 +16,35 @@ List<String> grades = [
 ];
 
 final List<String> sectors = [
+  "Bernerblock",
+  "Chuchichästli",
+  "Deponie",
   "Flachland",
-  "Laktatpiste",
   "Garage",
   "Grotte",
-  "Langeneggersturtz",
-  "Schmieregge",
+  "Laktatpischte",
+  "Langeneggerstutz",
+  "Mantlewand",
+  "Schliicherplättli",
+  "Speckegge",
 ];
 
 Color getColor(int grade) {
   switch (grade) {
     case 0:
-      return Colors.yellow;
     case 1:
       return Colors.orange;
     case 2:
     case 3:
-      return Colors.red;
     case 4:
+      return Colors.red;
     case 5:
     case 6:
-      return Colors.blue;
     case 7:
+      return Colors.blue;
     case 8:
     case 9:
+    case 10:
       return Colors.green;
     default:
       return Colors.black;
