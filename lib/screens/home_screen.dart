@@ -115,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Material(
+            color: Colors.white,
             elevation: 2,
             child: Column(
               children: [
@@ -138,7 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: SizedBox(
                       height: 60,
                       child: SfSparkBarChart(
-                        borderColor: Colors.green,
                         axisLineWidth: 0,
                         //labelStyle: const TextStyle(color: Colors.black),
                         labelDisplayMode: SparkChartLabelDisplayMode.all,
@@ -168,20 +168,38 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 final RouteModel route = routes[routes.length - index - 1];
                 bool isNew = DateTime.now().difference(route.date) <=
-                    const Duration(days: 7);
+                    const Duration(minutes: 7);
                 return ListTile(
-                  textColor: isNew ? Colors.amber : Colors.black,
-                  title: Text(route.name),
+                  title: Text(
+                    (isNew ? "(NEU) " : "") + route.name,
+                    style:
+                        TextStyle(color: isNew ? Colors.amber : Colors.black),
+                  ),
                   subtitle: Text(route.sector),
-                  leading: Container(
-                    width: 48,
-                    height: 48,
-                    //padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    alignment: Alignment.center,
-                    child: Text(
-                      grades[route.grade],
-                      style:
-                          TextStyle(color: getColor(route.grade), fontSize: 24),
+                  leading: SizedBox(
+                    width: 54,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          grades[route.grade],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: getColor(route.grade),
+                            fontSize: 24,
+                          ),
+                        ),
+                        route.getUserGrade() > -1
+                            ? Text(
+                                route.getUserGradeString(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: getColor(route.getUserGrade().round()),
+                                  fontSize: 14,
+                                ),
+                              )
+                            : Container(),
+                      ],
                     ),
                   ),
                   trailing: Text(

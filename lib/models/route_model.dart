@@ -29,7 +29,7 @@ class RouteModel extends HiveObject {
 
   double getUserGrade() {
     if (userGrades.isEmpty) {
-      return 0;
+      return -1;
     }
     return (userGrades.reduce((value, element) => value + element) /
         userGrades.length);
