@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../models/route_model.dart';
 import '../values.dart';
@@ -202,6 +203,76 @@ class _RouteScreenState extends State<RouteScreen> {
                   title: Text(comment),
                 );
               },
+            ),
+          ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: SfLinearGauge(
+                showAxisTrack: false,
+                showTicks: false,
+                interval: 1,
+                minimum: 0,
+                maximum: grades.length - 1,
+                labelFormatterCallback: (val) {
+                  return grades[int.parse(val)];
+                },
+                axisLabelStyle: const TextStyle(fontSize: 20),
+                useRangeColorForAxis: true,
+                markerPointers: [
+                  LinearWidgetPointer(
+                    value: route.grade.toDouble(),
+                    position: LinearElementPosition.outside,
+                    child: Icon(Icons.location_pin,
+                        color: getColor(route.grade), size: 30),
+                  ),
+                  LinearWidgetPointer(
+                    value: route.getUserDouble(),
+                    position: LinearElementPosition.outside,
+                    child: Icon(Icons.location_pin,
+                        color: getColor(route.getUserDouble().round()),
+                        size: 30),
+                  ),
+                ],
+                ranges: const [
+                  LinearGaugeRange(
+                    startValue: 0,
+                    endValue: 0.5,
+                    position: LinearElementPosition.outside,
+                    color: Colors.yellow,
+                  ),
+                  LinearGaugeRange(
+                    startValue: 0.5,
+                    endValue: 1.5,
+                    position: LinearElementPosition.outside,
+                    color: Colors.orange,
+                  ),
+                  LinearGaugeRange(
+                    startValue: 1.5,
+                    endValue: 3.5,
+                    position: LinearElementPosition.outside,
+                    color: Colors.red,
+                  ),
+                  LinearGaugeRange(
+                    startValue: 3.5,
+                    endValue: 6.5,
+                    position: LinearElementPosition.outside,
+                    color: Colors.blue,
+                  ),
+                  LinearGaugeRange(
+                    startValue: 6.5,
+                    endValue: 9.5,
+                    position: LinearElementPosition.outside,
+                    color: Colors.green,
+                  ),
+                  LinearGaugeRange(
+                    startValue: 9.5,
+                    endValue: 10,
+                    position: LinearElementPosition.outside,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

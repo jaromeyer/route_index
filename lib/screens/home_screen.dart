@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:passcode_screen/passcode_screen.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../models/route_model.dart';
 import '../values.dart';
@@ -18,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<String> _selectedSectors = sectors;
-  RangeValues _currentGradeRange = RangeValues(0, grades.length - 1.0);
+  SfRangeValues _currentGradeRange = const SfRangeValues(0, 11);
   bool _godMode = false;
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
@@ -61,12 +63,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // get & filter routes
-    final routes = Hive.box('routes')
+    final allRoutes = Hive.box('routes')
         .values
+        .where((route) => _selectedSectors.contains(route.sector));
+
+    List<int> gradeCount = List.filled(grades.length, 0);
+    for (RouteModel route in allRoutes) {
+      gradeCount[route.grade]++;
+    }
+
+    final routes = allRoutes
         .where((route) =>
-            route.grade >= _currentGradeRange.start.round() &&
-            route.grade <= _currentGradeRange.end.round() &&
-            _selectedSectors.contains(route.sector))
+            route.grade >= _currentGradeRange.start &&
+            route.grade <= _currentGradeRange.end - 1)
         .toList();
 
     return Scaffold(
@@ -78,7 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
           _godMode
               ? IconButton(
                   onPressed: () {
+                    // add new route and open edit screen
                     final RouteModel route = RouteModel();
+                    Hive.box('routes').add(route);
                     Navigator.pushNamed(context, '/edit', arguments: route)
                         .then((_) => setState(() {}));
                   },
@@ -120,30 +131,30 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: (i, v) => v,
                   ),
                 ),
-                RangeSlider(
-                  values: _currentGradeRange,
-                  max: grades.length - 1.0,
-                  divisions: grades.length - 1,
-                  labels: RangeLabels(
-                    grades[_currentGradeRange.start.round()],
-                    grades[_currentGradeRange.end.round()],
-                  ),
-                  onChanged: (RangeValues values) {
-                    setState(() {
-                      _currentGradeRange = values;
-                    });
-                  },
-                ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 12, left: 10, right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: grades
-                        .map((grade) => SizedBox(
-                            width: 30,
-                            child: Text(grade, textAlign: TextAlign.center)))
-                        .toList(),
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: SfRangeSelector(
+                    onChanged: (range) =>
+                        setState(() => _currentGradeRange = range),
+                    child: SizedBox(
+                      height: 70,
+                      child: SfSparkBarChart(
+                        axisLineWidth: 0,
+                        labelStyle: const TextStyle(color: Colors.black),
+                        labelDisplayMode: SparkChartLabelDisplayMode.all,
+                        data: gradeCount,
+                      ),
+                    ),
+                    enableIntervalSelection: true,
+                    min: 0,
+                    max: grades.length,
+                    initialValues: _currentGradeRange,
+                    interval: 1,
+                    labelPlacement: LabelPlacement.betweenTicks,
+                    labelFormatterCallback: (val, _) =>
+                        val < grades.length ? grades[val.toInt()] : "",
+                    stepSize: 1,
+                    showLabels: true,
                   ),
                 ),
               ],

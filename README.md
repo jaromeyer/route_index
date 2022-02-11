@@ -1,6 +1,6 @@
 # route_index
 
-Companion app for Adliswil Boulderhalle
+Companion app for Boulderhalle Adliswil
 
 ## Getting Started
 
