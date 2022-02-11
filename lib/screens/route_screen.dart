@@ -227,10 +227,10 @@ class _RouteScreenState extends State<RouteScreen> {
                         color: getColor(route.grade), size: 30),
                   ),
                   LinearWidgetPointer(
-                    value: route.getUserDouble(),
+                    value: route.getUserGrade(),
                     position: LinearElementPosition.outside,
                     child: Icon(Icons.location_pin,
-                        color: getColor(route.getUserDouble().round()),
+                        color: getColor(route.getUserGrade().round()),
                         size: 30),
                   ),
                 ],

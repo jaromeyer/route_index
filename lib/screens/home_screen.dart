@@ -89,7 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     // add new route and open edit screen
                     final RouteModel route = RouteModel();
-                    Hive.box('routes').add(route);
                     Navigator.pushNamed(context, '/edit', arguments: route)
                         .then((_) => setState(() {}));
                   },
@@ -137,10 +136,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     onChanged: (range) =>
                         setState(() => _currentGradeRange = range),
                     child: SizedBox(
-                      height: 70,
+                      height: 60,
                       child: SfSparkBarChart(
+                        borderColor: Colors.green,
                         axisLineWidth: 0,
-                        labelStyle: const TextStyle(color: Colors.black),
+                        //labelStyle: const TextStyle(color: Colors.black),
                         labelDisplayMode: SparkChartLabelDisplayMode.all,
                         data: gradeCount,
                       ),

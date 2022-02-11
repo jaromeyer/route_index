@@ -27,16 +27,18 @@ class RouteModel extends HiveObject {
   @HiveField(6)
   List<String> comments = [];
 
-  int getUserGrade() {
+  double getUserGrade() {
+    if (userGrades.isEmpty) {
+      return 0;
+    }
     return (userGrades.reduce((value, element) => value + element) /
-            userGrades.length)
-        .round();
+        userGrades.length);
   }
 
   String getUserGradeString() {
     if (userGrades.isEmpty) {
       return "-";
     }
-    return "${grades[getUserGrade()]} (${userGrades.length})";
+    return "${grades[getUserGrade().round()]} (${userGrades.length})";
   }
 }
