@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 final RouteModel route = routes[routes.length - index - 1];
                 bool isNew = DateTime.now().difference(route.date) <=
-                    const Duration(minutes: 7);
+                    const Duration(days: 7);
                 return ListTile(
                   title: Text(
                     (isNew ? "(NEU) " : "") + route.name,
