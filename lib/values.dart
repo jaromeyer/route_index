@@ -46,7 +46,9 @@ Color getColor(int grade) {
     case 9:
     case 10:
       return Colors.green;
-    default:
+    case 11:
       return Colors.black;
+    default:
+      return Colors.transparent;
   }
 }
