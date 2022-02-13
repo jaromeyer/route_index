@@ -24,7 +24,7 @@ class RouteModel extends HiveObject {
   @HiveField(5)
   List<int> userGrades = [];
 
-  @HiveField(6)
+  @HiveField(6, defaultValue: [])
   List<String> comments = [];
 
   double getUserGrade() {

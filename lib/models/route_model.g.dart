@@ -22,13 +22,14 @@ class RouteModelAdapter extends TypeAdapter<RouteModel> {
       ..sector = fields[2] as String
       ..setter = fields[3] as String
       ..date = fields[4] as DateTime
-      ..userGrades = (fields[5] as List).cast<int>();
+      ..userGrades = (fields[5] as List).cast<int>()
+      ..comments = fields[6] == null ? [] : (fields[6] as List).cast<String>();
   }
 
   @override
   void write(BinaryWriter writer, RouteModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -40,7 +41,9 @@ class RouteModelAdapter extends TypeAdapter<RouteModel> {
       ..writeByte(4)
       ..write(obj.date)
       ..writeByte(5)
-      ..write(obj.userGrades);
+      ..write(obj.userGrades)
+      ..writeByte(6)
+      ..write(obj.comments);
   }
 
   @override

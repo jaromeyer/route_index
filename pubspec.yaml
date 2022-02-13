@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  syncfusion_flutter_core: ^19.4.41
   syncfusion_flutter_charts: ^19.4.41
   syncfusion_flutter_sliders: ^19.4.41
   syncfusion_flutter_gauges: ^19.4.41
@@ -43,7 +44,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  material_color_utilities: ^0.1.4
 
 dev_dependencies:
   hive_generator: any

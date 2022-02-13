@@ -259,9 +259,9 @@ class _RouteScreenState extends State<RouteScreen> {
                         onSubmitted: (value) {
                           setState(() {
                             _commentController.clear();
-                            widget.route.comments.add(value);
+                            route.comments.add(value);
                           });
-                          widget.route.save();
+                          route.save();
                         },
                       ),
                     ),

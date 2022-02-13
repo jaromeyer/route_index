@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:passcode_screen/passcode_screen.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../models/route_model.dart';
@@ -20,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<String> _selectedSectors = sectors;
-  SfRangeValues _currentGradeRange = const SfRangeValues(0, 11);
+  SfRangeValues _currentGradeRange = SfRangeValues(0, grades.length);
   bool _godMode = false;
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
@@ -115,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Material(
-            color: Colors.white,
             elevation: 2,
             child: Column(
               children: [
@@ -133,28 +133,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child: SfRangeSelector(
-                    onChanged: (range) =>
-                        setState(() => _currentGradeRange = range),
-                    child: SizedBox(
-                      height: 60,
-                      child: SfSparkBarChart(
-                        axisLineWidth: 0,
-                        //labelStyle: const TextStyle(color: Colors.black),
-                        labelDisplayMode: SparkChartLabelDisplayMode.all,
-                        data: gradeCount,
-                      ),
+                  child: SfRangeSelectorTheme(
+                    data: SfRangeSelectorThemeData(
+                      thumbColor: Colors.white,
+                      inactiveRegionColor: Colors.grey[50]?.withAlpha(175),
+                      thumbStrokeWidth: 1,
+                      thumbStrokeColor: Colors.blueGrey,
                     ),
-                    enableIntervalSelection: true,
-                    min: 0,
-                    max: grades.length,
-                    initialValues: _currentGradeRange,
-                    interval: 1,
-                    labelPlacement: LabelPlacement.betweenTicks,
-                    labelFormatterCallback: (val, _) =>
-                        val < grades.length ? grades[val.toInt()] : "",
-                    stepSize: 1,
-                    showLabels: true,
+                    child: SfRangeSelector(
+                      onChanged: (range) {
+                        setState(() => _currentGradeRange = range);
+                      },
+                      child: SizedBox(
+                        height: 60,
+                        child: SfSparkBarChart(
+                          axisLineWidth: 0,
+                          //labelStyle: const TextStyle(color: Colors.black),
+                          labelDisplayMode: SparkChartLabelDisplayMode.all,
+                          data: gradeCount,
+                        ),
+                      ),
+                      enableIntervalSelection: true,
+                      min: 0,
+                      max: grades.length,
+                      initialValues: _currentGradeRange,
+                      interval: 1,
+                      labelPlacement: LabelPlacement.betweenTicks,
+                      labelFormatterCallback: (val, _) =>
+                          val < grades.length ? grades[val.toInt()] : "",
+                      stepSize: 1,
+                      showLabels: true,
+                    ),
                   ),
                 ),
               ],
